@@ -1,0 +1,105 @@
+<!-- 
+      jgcx.html
+      <车主宝典>
+      作者:zero
+      Created by XH on 2014-11-07.
+      Copyright 2014 XH. All rights reserved.
+ -->
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" id="viewport" content="width=device-width,initial-scal=1,minimum-scale=1,user-scalable=no,target-densitydpi=high-dpi" />
+
+		<title>车主宝典--加油站查询</title>
+		<meta name="Keywords" content="关键字" />
+		<meta name="Description" content="简述" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<style type="text/css">
+			ul {
+				list-style: none
+			}
+			body,
+			html {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				margin: 0;
+			}
+			#l-map {
+				height: 100%;
+				width: 100%;
+				float: left;
+				#bcbcbc;
+			}
+		</style>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=A79a5724fde4c36eefb8baaa76cd6008"></script>
+
+	</head>
+
+	<body>
+		<header>
+			<a href="javascript:history.go(-1);"></a>
+			加油站查询
+			<a href="index.html"></a>
+		</header>
+		<section>
+			<div id="l-map"></div>
+		</section>
+		<footer>
+			技术支持：微车宝
+		</footer>
+	</body>
+	<script type="text/javascript">
+		var map = new BMap.Map("l-map");
+		map.centerAndZoom(new BMap.Point(lng, lat), 11);
+		var myCity = new BMap.LocalCity();
+		var lng, lat;
+
+		 //获取当前ip的经纬度,完成后创建地图
+		var geolocation = new BMap.Geolocation();
+		geolocation.getCurrentPosition(function(r) {
+			if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+				var mk = new BMap.Marker(r.point);
+				map.addOverlay(mk);
+				map.panTo(r.point);
+
+				alert('您的位置：' + r.point.lng + ',' + r.point.lat);
+			} else {
+				alert('failed' + this.getStatus());
+
+			}; {
+				enableHighAccuracy: false
+			}
+
+			//创建地图
+
+			map.addControl(new BMap.NavigationControl()); //添加默认缩放平移控件
+			map.addControl(new BMap.NavigationControl({
+				anchor: BMAP_ANCHOR_TOP_RIGHT,
+				type: BMAP_NAVIGATION_CONTROL_SMALL
+			})); //右上角，仅包含平移和缩放按钮
+			map.addControl(new BMap.NavigationControl({
+				anchor: BMAP_ANCHOR_BOTTOM_LEFT,
+				type: BMAP_NAVIGATION_CONTROL_PAN
+			})); //左下角，仅包含平移按钮
+			map.addControl(new BMap.NavigationControl({
+				anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+				type: BMAP_NAVIGATION_CONTROL_ZOOM
+			})); //右下角，仅包含缩放按钮
+			map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用
+			map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用
+			map.addControl(new BMap.ScaleControl()); // 添加比例尺控件
+
+			//搜索
+			var local = new BMap.LocalSearch(map, {
+				renderOptions: {
+					map: map
+				}
+			});
+			local.search("加油站");
+		});
+	</script>
+
+</html>
